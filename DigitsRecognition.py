@@ -54,8 +54,13 @@ clf.fit(hog_features, labels)
 # Reading test images
 #############################################################
 t1=[]
-for image_path in glob.glob("D:\\temp\\img\\*.png"):
-    image = misc.imread(image_path,flatten=True)
+test_fname=pd.read_csv("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\Test.csv","r")
+tfname=test_fname['filename']
+
+testpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\Train\\Images\\test\\"
+for fnam in tfname:
+    print(testpath+fnam)
+    image = misc.imread(testpath+fnam,flatten=True)
     t1.append(image)
     print (image.shape)
     print (image.dtype)
@@ -70,4 +75,13 @@ tf = np.array(test_fd, 'float64')
 
 
 mypred=clf.predict(tf)
-mypred
+
+mydf2=(pd.Series(mypred))
+test_name=tfname
+test_res=mydf2
+
+myresults=pd.concat([test_name,test_res],axis=1)
+myresults.columns=['filename', 'label']
+myresults.to_csv("d:\\myresults.csv",index=False)
+
+
