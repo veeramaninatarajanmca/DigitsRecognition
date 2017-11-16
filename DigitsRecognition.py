@@ -21,20 +21,22 @@ import pandas as pd
 
 os.chdir("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition")
 
+trpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\train\\train.csv"
+df=pd.read_csv(trpath)
+labels=df['label']
+fname=df['filename']
 
 # Reading all train images & data
 features=[]
-imgpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\train\\images\\train\\*.png"
-for image_path in glob.glob(imgpath):
-    image = misc.imread(image_path,flatten=True)
+imgpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\train\\images\\train\\"
+for fn in fname:
+    print(imgpath+fn)
+    image = misc.imread(imgpath+fn,flatten=True)
     features.append(image)
     print (image.shape)
     print (image.dtype)
 
 
-trpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\train\\train.csv"
-df=pd.read_csv(trpath)
-labels=df['label']
 
 
 list_hog_fd = []
