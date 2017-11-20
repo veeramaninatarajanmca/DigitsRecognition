@@ -10,7 +10,6 @@ Created on Tue Nov 14 12:22:34 2017
 
 # To save trained objects
 from sklearn.externals import joblib
-# from sklearn import datasets
 from skimage.feature import hog
 from sklearn.svm import LinearSVC
 import numpy as np
@@ -18,9 +17,10 @@ from scipy import misc
 import glob
 import os
 import pandas as pd
+import random
+from sklearn.metrics import accuracy_score
 
-os.chdir("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition")
-
+# Reading training labels
 trpath="C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\train\\train.csv"
 df=pd.read_csv(trpath)
 labels=df['label']
@@ -37,22 +37,39 @@ for fn in fname:
     print (image.dtype)
 
 
-
-
 list_hog_fd = []
 for feature in features:
     fd = hog(feature.reshape((28, 28)), orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1), visualise=False)
     list_hog_fd.append(fd)
 hog_features = np.array(list_hog_fd, 'float64')
+traindf=pd.DataFrame(hog_features)
+
+
+# Split train and test 80-20
+test_list=random.sample(range(0,48999),9800)
+wholelist=list(range(49000))
+train_list=set(wholelist)-set(test_list)
+train_list=list(train_list)
+tr_labels=labels.iloc[train_list]
+te_labels=labels.iloc[test_list]
+tr_images=traindf.iloc[train_list]
+te_images=traindf.iloc[test_list]
 
 
 # Creating SVM Linear classifier objects
 clf = LinearSVC()
-clf.fit(hog_features, labels)
+clf.fit(tr_images, tr_labels)
+
+# internal testing - 20% of the data
+test20_pred=clf.predict(te_images)
+test20_pred=pd.Series(test20_pred,dtype="category")ss
+test20_act=pd.Series(te_labels,dtype="category")
+accuracy_score(test20_act,test20_pred,normalize=True)
+
 
 
 # Reading test images
-#############################################################
+#############################################################################################################
 t1=[]
 test_fname=pd.read_csv("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\data\\Test.csv","r")
 tfname=test_fname['filename']
