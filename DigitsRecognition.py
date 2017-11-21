@@ -33,13 +33,13 @@ for fn in fname:
     print(imgpath+fn)
     image = misc.imread(imgpath+fn,flatten=True)
     features.append(image)
-    print (image.shape)
-    print (image.dtype)
+#    print (image.shape)
+#    print (image.dtype)
 
 
 list_hog_fd = []
 for feature in features:
-    fd = hog(feature.reshape((28, 28)), orientations=9, pixels_per_cell=(8,8), cells_per_block=(2, 2), visualise=False)
+    fd = hog(feature.reshape((28, 28)), orientations=9, pixels_per_cell=(4,4), cells_per_block=(2, 2), visualise=False)
     list_hog_fd.append(fd)
 hog_features = np.array(list_hog_fd, 'float64')
 traindf=pd.DataFrame(hog_features)
@@ -85,7 +85,7 @@ for fnam in test_fname:
 
 test_fd= []
 for feat in t_timage:
-    fd = hog(feat.reshape((28, 28)), orientations=9, pixels_per_cell=(8,8), cells_per_block=(2, 2), visualise=False)
+    fd =hog(feat.reshape((28, 28)), orientations=9, pixels_per_cell=(4,4), cells_per_block=(2, 2), visualise=False)
     test_fd.append(fd)
 tf = np.array(test_fd, 'float64')
 
@@ -98,6 +98,6 @@ mypred=(pd.Series(mypred))
 
 myresults=pd.concat([test_fname,mypred],axis=1)
 myresults.columns=['filename', 'label']
-myresults.to_csv("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\output\\myresults4.csv",index=False)
+myresults.to_csv("C:\\Users\\user\\Dropbox\\temp\\Hackathons\\AV\\DigitsRecognition\\output\\myresults6.csv",index=False)
 
 
